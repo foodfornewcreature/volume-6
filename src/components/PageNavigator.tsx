@@ -87,13 +87,23 @@ export function PageNavigator() {
     // Handle typed English page input
     if (englishPageInput.trim()) {
       const pageValue = englishPageInput.trim();
-      // Find which chapter contains this English page
-      const foundPage = englishPages.find(p => p.value === pageValue || p.value === `[${pageValue}]` || p.value === `[Page ${pageValue}]`);
+      // Try to find the page with various formats: direct match, with brackets, with "Page" prefix, or with "F" prefix
+      const foundPage = englishPages.find(p => {
+        const cleanValue = pageValue.replace(/^F/i, ''); // Remove F prefix if user typed it
+        return p.value === pageValue ||
+               p.value === `[${pageValue}]` ||
+               p.value === `[Page ${pageValue}]` ||
+               p.value === `F${cleanValue}` ||
+               p.value === `[F${cleanValue}]` ||
+               p.value === `[Page F${cleanValue}]`;
+      });
       if (foundPage) {
         navigate(`/chapter/${foundPage.chapterId}?page=${foundPage.value}`);
       } else {
-        // If not found, default to chapter 1 with the typed value
-        navigate(`/chapter/01?page=${pageValue}`);
+        // If not found, default to chapter 1 with the typed value (add F prefix if just a number)
+        const isNumeric = /^\d+$/.test(pageValue);
+        const searchValue = isNumeric ? `F${pageValue}` : pageValue;
+        navigate(`/chapter/01?page=${searchValue}`);
       }
       return;
     }
