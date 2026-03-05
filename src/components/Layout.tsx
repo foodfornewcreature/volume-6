@@ -1,4 +1,5 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 
@@ -8,6 +9,17 @@ interface LayoutProps {
 }
 
 export function Layout({ children, footerProps }: LayoutProps) {
+  const location = useLocation();
+  const mainRef = useRef<HTMLElement>(null);
+
+  // Scroll to top when route changes
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0;
+    }
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   // Re-inject GlobalRize Bible Link plugin after React renders content
   // so it can scan dynamic DOM (e.g., on route/content changes).
   useEffect(() => {
@@ -39,7 +51,7 @@ export function Layout({ children, footerProps }: LayoutProps) {
   return (
     <div className="relative flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="flex-1 overflow-y-auto pt-2 pb-16 md:pb-16">
+      <main ref={mainRef} className="flex-1 overflow-y-auto pt-2 pb-16 md:pb-16">
         {/*
           Fix: provide small mobile gutters without the extra `container` offset.
           - Mobile: px-4 (standard safe reading padding)

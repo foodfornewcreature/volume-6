@@ -3,6 +3,14 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { FileText } from "lucide-react";
 
 export function Header() {
+  const handleHomeClick = () => {
+    window.scrollTo(0, 0);
+    const mainElement = document.querySelector('main');
+    if (mainElement) {
+      mainElement.scrollTop = 0;
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       {/*
@@ -11,7 +19,7 @@ export function Header() {
       */}
       <div className="mx-auto w-full max-w-screen-lg px-4 md:px-6 flex h-14 items-center">
         <div className="mr-4 flex">
-          <Link to="/" className="flex flex-col items-start">
+          <Link to="/" onClick={handleHomeClick} className="flex flex-col items-start">
             <span className="font-bold font-anek-tamil text-2xl">Volume Six</span>
             <span className="text-xs font-normal">The New Creation</span>
           </Link>
