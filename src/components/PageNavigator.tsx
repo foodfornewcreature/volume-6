@@ -206,11 +206,11 @@ export function PageNavigator() {
         />
       </div>
 
-      <div className="flex items-end">
+      <div className="flex items-stretch self-stretch">
         <Button
           onClick={handleGoToPage}
           disabled={loading || (!selectedTamilPage && !selectedEnglishPage && !tamilPageInput.trim() && !englishPageInput.trim())}
-          className="w-full mt-auto"
+          className="h-full"
         >
           Go
         </Button>
